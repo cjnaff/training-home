@@ -37,7 +37,7 @@ public class CodeChallenges {
         numsMap.entrySet()
                 .stream()
                 .filter(m -> numsMap.containsKey(target - m.getKey()) &&
-                            numsMap.get(target - m.getKey()) != m.getValue())
+                        numsMap.get(target - m.getKey()) != m.getValue())
                 .forEach(e -> results.add(e.getValue()));
 
            /*for(int i = 0 ; i < nums.length ; i++) {
@@ -164,20 +164,20 @@ public class CodeChallenges {
     public ListNode mergeTwoListsMyWay(ListNode list1, ListNode list2) {
         List<Integer> newList = new LinkedList<>();
         ListNode l1 = list1;
-           do {
-               if(l1 != null) {
-                   newList.add(l1.val);
-                   l1 = l1.next;
-               }
+        do {
+            if(l1 != null) {
+                newList.add(l1.val);
+                l1 = l1.next;
+            }
 
-           } while(l1 != null);
+        } while(l1 != null);
 
         System.out.println(newList);
         ListNode l2 = list2;
-         do  {
-             newList.add(l2.val);
-             l2 = l2.next;
-         } while (l2 != null);
+        do  {
+            newList.add(l2.val);
+            l2 = l2.next;
+        } while (l2 != null);
         newList.sort(Integer::compareTo);
         System.out.println(newList);
         return generateNestedListNodesFromList(newList);
@@ -292,30 +292,43 @@ Output: 9
          */
 
         System.out.println("Unordered Passes: " + passes);
-        Set<String> starts = passes.stream()
-                .map(pas -> pas.start)
-                .collect(Collectors.toSet());
-        Set<String> ends = passes.stream()
-                .map(pas -> pas.end)
-                .collect(Collectors.toSet());
+        if(passes.size() > 0) {
+            Set<String> starts = passes.stream()
+                    .map(pas -> pas.start)
+                    .collect(Collectors.toSet());
+            Set<String> ends = passes.stream()
+                    .map(pas -> pas.end)
+                    .collect(Collectors.toSet());
 
-        String start = starts.stream()
-                .filter(s -> !ends.contains(s))
-                .findFirst().orElse("");
-
-        String end = ends.stream()
-                .filter(e -> !starts.contains(e))
-                .findFirst()
-                .orElse("");
-
-        List<BoardingPass> sortedPasses = new ArrayList<>();
-        sortedPasses.add(passes.stream().filter(p -> p.start.equals(start)).findAny().get());
-
-        while (passes.stream().filter(p -> p.start.equals(sortedPasses.getLast().end)).findAny().isPresent()) {
-            sortedPasses.add(passes.stream().filter(p -> p.start.equals(sortedPasses.getLast().end)).findAny().get());
+            String start = starts.stream()
+                    .filter(s -> !ends.contains(s))
+                    .findFirst().orElse("");
+            if(!start.equals("")) {
+                List<BoardingPass> sortedPasses = new ArrayList<>();
+                // add starting pass
+                sortedPasses.add(passes.stream().filter(p -> p.start.equals(start)).findAny().get());
+                // find next pass where start equals end on previous
+                while (passes.stream()
+                        .filter(p -> p.start.equals(sortedPasses.getLast().end))
+                        .findAny()
+                        .isPresent()) {
+                    sortedPasses.add(passes.stream()
+                            .filter(p -> p.start.equals(sortedPasses.getLast().end))
+                            .findAny()
+                            .get());
+                }
+                if(passes.size() == sortedPasses.size()) {
+                    return sortedPasses;
+                }else {
+                    System.out.println("Missing a boarding pass in the chain. ");
+                    throw new RuntimeException("Incomplete set of passes.");
+                }
+            } else {
+                System.out.println("Can't find a start location. ");
+                throw new RuntimeException("Cannot sort boarding passes.");
+            }
         }
-
-        return sortedPasses;
+        return null;
     }
 
 }
