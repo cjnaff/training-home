@@ -17,18 +17,6 @@ public class LambdaExercises {
 
     public static void main(String[] args) {
 
-        IdentifyMyParts a = new IdentifyMyParts();
-        IdentifyMyParts bb = new IdentifyMyParts();
-
-        a.y = 5;
-        bb.y = 6;
-        a.x = 1;
-        bb.x = 2;
-        System.out.println("a.y = " + a.y);
-        System.out.println("b.y = " + bb.y);
-        System.out.println("a.x = " + a.x);
-        System.out.println("b.x = " + bb.x);
-        System.out.println("IdentifyMyParts.x = " + IdentifyMyParts.x);
 
         System.out.println("1 is odd " + isOdd(1));
 

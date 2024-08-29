@@ -6,6 +6,7 @@ public class RegexPatternValidator {
     private  Matcher matcher;
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
     private static final String RIGHTFAX_EMAIL_PATTERN = "(^/name=[A-Za-z_.'\\- ]+)?/fax=[0-9]+@fax(dev)?\\.kp\\.org";
+    private static final String PAREN_PATTERN = "\\\\(.*?\\\\)";
 
     public RegexPatternValidator(Pattern pattern, Matcher matcher) {
         this.pattern = pattern;
@@ -27,6 +28,12 @@ public class RegexPatternValidator {
 
     public boolean validRightFaxEmailPattern(String s) {
         pattern = Pattern.compile(RIGHTFAX_EMAIL_PATTERN);
+        setMatcher(pattern.matcher(s));
+        return matcher.matches();
+    }
+
+    public boolean validMatchingParentheses(String s) {
+        pattern = Pattern.compile(PAREN_PATTERN);
         setMatcher(pattern.matcher(s));
         return matcher.matches();
     }

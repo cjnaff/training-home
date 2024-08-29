@@ -1,10 +1,7 @@
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -151,42 +148,18 @@ public class CollectingAndMappingTest {
 
     }
     @Test
-    public void arraysCompareVsMismatch() {
+    // The flatMap() operation has the effect of applying a one-to-many transformation to the elements of the stream,
+    // and then flattening the resulting elements into a new stream.
+    public void testFlatMap() {
         int[] lista = {4,6,9,11};
-        int[] listb = {4,6,9};
-        int[] listc = {4,6,9,15};
-        int[] listd = {4,9};
-        int[] liste = {11,9,6,4};
-        int[] listf = {4,6,9,11};
-        System.out.println("A to B " + Arrays.compare(lista, listb));
-        System.out.println("B to A " +Arrays.compare(listb, lista));
-        System.out.println("A to C " +Arrays.compare(lista, listc));
-        System.out.println("C to A "+Arrays.compare(listc, lista));
-        System.out.println("A to D "+Arrays.compare(lista, listd));
-        System.out.println("A to E "+Arrays.compare(lista, liste));
-        System.out.println("A to F " + Arrays.compare(lista, listf));
-        System.out.println(Arrays.mismatch(lista, listb));
-        System.out.println(Arrays.mismatch(lista, listc));
-        System.out.println(Arrays.mismatch(lista, listd));
-        System.out.println(Arrays.mismatch(lista, lista));
-
-        String[] a1 = {"ant", "ball", "zebra", "ANT"};
-        String[] b1 = {"ant", "ball", "cat", "zebra", "ANT"};
-        String[] c1 = { "ANT",  "zebra",  "ball", "ant"};
-        String[] a2 = {"ant", "ball", "zebra", "ANT"};
-        String[] a3 = {"ant", "ball", "ANT", "zebra"};
-        System.out.println("strings");
-        System.out.println("a1 to b1 " + Arrays.compare(a1, b1));
-        System.out.println("a1 to c1 " + Arrays.compare(a1, c1));
-        System.out.println("a1 to a2 " + Arrays.compare(a1, a2));
-        System.out.println("a1 to a3 " + Arrays.compare(a1, a3));
-        System.out.println(Arrays.mismatch(a1, b1));
-        System.out.println(Arrays.mismatch(a1, c1));
-        System.out.println(Arrays.mismatch(a1, a2));
-        System.out.println(Arrays.mismatch(a1, a3));
-
-        System.out.println(1 + 2 + "c");
-
+        int[] listb = {3,12,34,1};
+        List<List<Integer>> listOfIntLists = Arrays.asList(Arrays.stream(lista).boxed().toList(), Arrays.stream(listb).boxed().toList());
+        List<Integer> flatListOfInts = listOfIntLists.stream()
+                .flatMap(list -> list.stream()).collect(Collectors.toList());
+        // methodref
+//        List<Integer> flatListOfInts2 = listOfIntLists.stream()
+//                .flatMap(Collection::stream).collect(Collectors.toList());
+        System.out.println("Before: " + listOfIntLists + ", After: " + flatListOfInts);
     }
 
     @Test
@@ -226,6 +199,20 @@ public class CollectingAndMappingTest {
 
 //        Arrays.stream(nums)
 //                .collect
+    }
+
+    @Test
+    public void testDeque() {
+        Deque<Integer> ints = new ArrayDeque<>();
+        ints.offer(1);  // deque contains 1
+        ints.add(2);    // deque 1, 2  adds to tail
+        ints.push(3); //deque 3,1,2 push puts 3 at front
+        System.out.println(ints);
+        assertTrue(ints.pop() == 3);  // removes 3
+        assertTrue(ints.peek() == 1);  // peeks at top of deque which is now 1
+        assertTrue(ints.remove() == 1);
+
+
     }
 
 }

@@ -26,6 +26,29 @@ public class RegexPatternValidatorTest {
     }
 
     @Test
+    public void testNotMatchingParens() {
+//		assertFalse(re.validEmailPattern("notanemail"));
+        String s = "Hi there (hello";
+        String[] parts = s.split("[\\(\\)]");
+        for (String part : parts) {
+            System.out.println(part);
+        }
+        String returnvalue = "NO";
+        char open = '(';
+        char closed = ')';
+        int countOpen = (int) s.chars().filter(ch -> ch == open).count();
+        int countClosed = (int) s.chars().filter(ch -> ch == closed).count();
+        switch (s) {
+            case  "" -> returnvalue = "YES";
+            case String st when (countOpen == countClosed) -> returnvalue = "YES";
+            default -> System.out.println("Unable to parse string");
+        }
+        System.out.println("Is Balanced? " + returnvalue);
+
+        assertFalse("Not Matching", re.validMatchingParentheses(s));
+    }
+
+    @Test
     public void testValidRightFaxEmailNameWithPeriod() {
         assertTrue(re.validRightFaxEmailPattern("/name=Dr.Shetab/fax=912097357188@fax.kp.org"));
     }
